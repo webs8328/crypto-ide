@@ -2,13 +2,15 @@ package com.example.stockmarketide;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.event.ActionEvent;
+import javafx.scene.control.TextArea;
 
 public class StockController {
     @FXML
-    private Label welcomeText;
+    private TextArea codeText;
 
     @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+    void runCode(ActionEvent event) {
+
     }
 }
