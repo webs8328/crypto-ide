@@ -12,7 +12,7 @@ public class StockApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(StockApplication.class.getResource("stockideview.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        stage.setTitle("Stock Market IDE");
         stage.setScene(scene);
         stage.show();
     }
