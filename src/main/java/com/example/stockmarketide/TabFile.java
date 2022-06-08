@@ -16,21 +16,24 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
+import javafx.scene.control.Tab;
 
 public class TabFile {
     File file;
     String text;
     String name;
     Path path;
+    Tab tab;
 
 
-    public void TabFile(File f) throws Exception {
+    public void TabFile(File f, Tab t) throws Exception {
         this.file = f;
         this.name = f.getName();
         String filepath = f.getAbsolutePath();
         this.path = Path.of(filepath);
         this.text = Files.readString(path);
+        this.tab = t;
+        tab.setOnSelectionChanged();
     }
 
 
