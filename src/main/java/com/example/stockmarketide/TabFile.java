@@ -26,14 +26,13 @@ public class TabFile {
     Tab tab;
 
 
-    public void TabFile(File f, Tab t) throws Exception {
+    public TabFile(File f, Tab t) throws Exception {
         this.file = f;
         this.name = f.getName();
         String filepath = f.getAbsolutePath();
         this.path = Path.of(filepath);
         this.text = Files.readString(path);
         this.tab = t;
-        tab.setOnSelectionChanged();
     }
 
 
