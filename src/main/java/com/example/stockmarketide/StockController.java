@@ -2,6 +2,8 @@ package com.example.stockmarketide;
 
 
 import java.util.HashMap;
+
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +20,7 @@ import javafx.scene.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.event.*;
 
 import java.io.File;
 
@@ -79,6 +82,8 @@ public class StockController{
 
     @FXML
     void openFile(MouseEvent event) throws Exception {
+        SingleSelectionModel<Tab> selectionModel = fileTabPane.getSelectionModel();
+
         if(event.getClickCount() == 2)
         {
             TreeItem<String> item = fileView.getSelectionModel().getSelectedItem();
@@ -90,10 +95,17 @@ public class StockController{
             // Create New Tab
             Tab tab = new Tab();
             tab.setText(name);
+            tab.setOnSelectionChanged(new EventHandler<Event>() {
+                @Override
+                public void handle(Event t) {
+                    changeText(t);
+                }
+            });
             TabFile tabfile = new TabFile(new File(folder.getAbsolutePath() + "/" + name), tab);
             openFiles.put(name, tabfile);
             fileTabPane.getTabs().add(tab);
             codeText.setText(tabfile.text);
+            selectionModel.select(tab);
         }
 
     }
@@ -107,14 +119,13 @@ public class StockController{
         }
         folder = file;
         TreeItem<String> root = new TreeItem<String>(file.getName());
-        fileView.setShowRoot(false);
 
-
-        File fileList[] = folder.listFiles();
 
         // create tree
-        for (File f : fileList) {
-            createTree(file, root);
+        for (File f : file.listFiles()) {
+
+            createTree(f, root);
+
         }
 
         fileView.setRoot(root);
@@ -126,6 +137,7 @@ public class StockController{
 
 
     public static void createTree(File file, TreeItem<String> parent) {
+        System.out.println(file.getName());
         if (file.isDirectory()) {
             TreeItem<String> treeItem = new TreeItem<String>(file.getName());
             parent.getChildren().add(treeItem);
@@ -148,10 +160,9 @@ public class StockController{
     }
 
     @FXML
-    void changeText(ActionEvent event) {
+    void changeText(Event event) {
         Tab tab = fileTabPane.getSelectionModel().getSelectedItem();
         String tabname = tab.getText();
-        System.out.println(tabname);
         codeText.setText(openFiles.get(tabname).text);
 
 
