@@ -21,15 +21,18 @@ import javafx.scene.control.*;
 import javafx.scene.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.event.*;
 
 import java.io.File;
+import java.util.Optional;
 
 public class StockController{
 
 
     DirectoryChooser dChooser = new DirectoryChooser();
+    FileChooser fileChooser = new FileChooser();
 
 
     //This var is to store the overall project folder
@@ -72,14 +75,79 @@ public class StockController{
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("newFilePopUp.fxml"));
         DialogPane dialogPane = fxmlLoader.load();
-        StockController sc = fxmlLoader.getController();
+        NewFilePopUpController sc = fxmlLoader.getController();
+        Dialog<ButtonType> dialog = new Dialog<ButtonType>();
+        dialog.setDialogPane(dialogPane);
+        dialog.setTitle("New File");
+        Optional<ButtonType> op = dialog.showAndWait();
+
+        if (op.get() == ButtonType.OK) {
+            String name = sc.getNewFileName();
+            if (name == "") {
+                return;
+            }
+            name = name + ".txt";
+            if (folder == null) {
+
+            }
+        }
+
 
     }
 
     //This will create an entirely new project
     @FXML
-    void newProject(ActionEvent event) {
+    void newProject(ActionEvent event) throws IOException{
         clearStuff();
+        Stage stage = (Stage) ap.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("newFilePopUp.fxml"));
+        DialogPane dialogPane = fxmlLoader.load();
+        NewFilePopUpController sc = fxmlLoader.getController();
+        Dialog<ButtonType> dialog = new Dialog<ButtonType>();
+        dialog.setDialogPane(dialogPane);
+        dialog.setTitle("New Project");
+        Optional<ButtonType> op = dialog.showAndWait();
+        dChooser.setTitle("Select where you want this Project to be located");
+        File file = dChooser.showDialog(stage);
+        if (file == null) {
+            return;
+        }
+        if (op.get() == ButtonType.OK) {
+            String name = sc.getNewFileName();
+            if (name == "") {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setHeaderText("Input not valid");
+                errorAlert.setContentText("You did not enter a Project Name");
+                errorAlert.showAndWait();
+                return;
+            }
+            String path = file.getAbsolutePath();
+
+            Boolean worked = new File(path + "/" + name).mkdirs();
+
+            if (!worked) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setHeaderText("Something went wrong!");
+                errorAlert.setContentText("Possible Solution: Make sure the name is not already taken!");
+                errorAlert.showAndWait();
+                return;
+            }
+            File f = new File(path + "/" + name);
+            folder = f;
+
+
+
+        }
+
+
+
+
+
+
+
+
+
         TreeItem<String> root = new TreeItem<String>("UnsavedProject");
 
         fileView.setRoot(root);
@@ -124,6 +192,7 @@ public class StockController{
     void openProject(ActionEvent event) {
         clearStuff();
         Stage stage = (Stage) ap.getScene().getWindow();
+        dChooser.setTitle("Select a Project");
         File file = dChooser.showDialog(stage);
         if (file == null) {
             return;
@@ -184,6 +253,7 @@ public class StockController{
         openFiles.clear();
         fileTabPane.getTabs().clear();
         codeText.clear();
+        folder = null;
     }
 
 
