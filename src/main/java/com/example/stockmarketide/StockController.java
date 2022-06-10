@@ -1,12 +1,14 @@
 package com.example.stockmarketide;
 
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.TabPane;
@@ -66,13 +68,21 @@ public class StockController{
 
     //This will add a new file to the current project
     @FXML
-    void newFile(ActionEvent event) {
+    void newFile(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("newFilePopUp.fxml"));
+        DialogPane dialogPane = fxmlLoader.load();
+        StockController sc = fxmlLoader.getController();
 
     }
 
     //This will create an entirely new project
     @FXML
     void newProject(ActionEvent event) {
+        clearStuff();
+        TreeItem<String> root = new TreeItem<String>("UnsavedProject");
+
+        fileView.setRoot(root);
 
     }
 
@@ -112,6 +122,7 @@ public class StockController{
 
     @FXML
     void openProject(ActionEvent event) {
+        clearStuff();
         Stage stage = (Stage) ap.getScene().getWindow();
         File file = dChooser.showDialog(stage);
         if (file == null) {
@@ -169,7 +180,11 @@ public class StockController{
     }
 
 
-
+    void clearStuff() {
+        openFiles.clear();
+        fileTabPane.getTabs().clear();
+        codeText.clear();
+    }
 
 
 
