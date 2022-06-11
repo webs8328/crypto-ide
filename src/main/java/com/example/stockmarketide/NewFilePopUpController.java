@@ -29,9 +29,16 @@ public class NewFilePopUpController {
     private TextField newFileName;
 
 
+    @FXML
+    private Label newFilePopupLabel;
+
     String getNewFileName() {
         String s = newFileName.getCharacters().toString();
         return s;
+    }
+
+    void setNewFilePopupLabel(String s) {
+        newFilePopupLabel.setText(s);
     }
 
 }
