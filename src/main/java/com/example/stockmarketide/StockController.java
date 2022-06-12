@@ -1,12 +1,12 @@
 package com.example.stockmarketide;
 
 
-<<<<<<< HEAD
+
 import java.io.FileWriter;
 import java.io.IOException;
-=======
+
 import java.util.ArrayList;
->>>>>>> 10ed151e744010326268d1f0257bbb570adb84c5
+
 import java.util.HashMap;
 
 import javafx.event.Event;
@@ -49,12 +49,12 @@ public class StockController{
     // This var is used to store the current open tabs we have
     public HashMap<String, TabFile> openFiles = new HashMap<String, TabFile>();
 
-<<<<<<< HEAD
+
 
     Tab prevTab = null;
-=======
+
     public JSONObject currData;
->>>>>>> 10ed151e744010326268d1f0257bbb570adb84c5
+
 
     // This var is the actual code we have in the textarea
     @FXML
@@ -367,11 +367,13 @@ public class StockController{
         }
 
 
-<<<<<<< HEAD
+
         prevTab = tab;
 
         codeText.setText(openFiles.get(tabname).text);
-=======
+    }
+
+
     // Right now this is gonna update currData instance variable to the most recent data
     // pulled by the API call this triggers, using the listed cryptos in the search bar
     // and the checked boxes in "variables" tab. Then, clears search bar text.
@@ -391,13 +393,13 @@ public class StockController{
         String[] variables = constructVars.toArray(new String[0]);
 
         currData = API.fetch(coins, variables);
->>>>>>> 10ed151e744010326268d1f0257bbb570adb84c5
+
 
         cryptoSearchBar.setText("");
         System.out.println(currData);
     }
 
-    }
+
 
 
     void clearStuff() {
