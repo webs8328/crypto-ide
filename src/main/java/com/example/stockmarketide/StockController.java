@@ -47,6 +47,7 @@ public class StockController{
 
     // This var is used to store the current open tabs we have
     public HashMap<String, TabFile> openFiles = new HashMap<String, TabFile>();
+    public HashMap<String, MenuItem> openFilesMenu = new HashMap<String, MenuItem>();
 
 
 
@@ -259,7 +260,9 @@ public class StockController{
                     codeText.clear();
                     prevTab = null;
                     openFiles.remove(tab.getText());
-                    runMenu.getItems().remove(tab.getText());
+                    MenuItem i = openFilesMenu.get(tab.getText());
+                    runMenu.getItems().remove(i);
+                    openFilesMenu.remove(tab.getText());
                 }
             });
 
@@ -278,7 +281,6 @@ public class StockController{
             fileTabPane.getTabs().add(tab);
             fileTabPane.getSelectionModel().select(tab);
             makeMenuItem(name);
-
         }
 
     }
@@ -294,15 +296,10 @@ public class StockController{
         }
         folder = file;
         TreeItem<String> root = new TreeItem<String>(file.getName());
-
-
         // create tree
         for (File f : file.listFiles()) {
-
             createTree(f, root);
-
         }
-
         fileView.setRoot(root);
     }
 
@@ -401,6 +398,8 @@ public class StockController{
 
     void clearStuff() {
         openFiles.clear();
+        openFilesMenu.clear();
+        runMenu.getItems().clear();
         fileTabPane.getTabs().clear();
         codeText.clear();
         folder = null;
@@ -444,6 +443,7 @@ public class StockController{
             }
         });
         runMenu.getItems().add(i);
+        openFilesMenu.put(name, i);
     }
 
 
