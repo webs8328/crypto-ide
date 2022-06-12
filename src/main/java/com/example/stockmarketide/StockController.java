@@ -1,8 +1,12 @@
 package com.example.stockmarketide;
 
 
+<<<<<<< HEAD
 import java.io.FileWriter;
 import java.io.IOException;
+=======
+import java.util.ArrayList;
+>>>>>>> 10ed151e744010326268d1f0257bbb570adb84c5
 import java.util.HashMap;
 
 import javafx.event.Event;
@@ -26,6 +30,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.event.*;
 
+import org.json.simple.JSONObject;
+
 import java.io.File;
 import java.util.Optional;
 
@@ -43,8 +49,12 @@ public class StockController{
     // This var is used to store the current open tabs we have
     public HashMap<String, TabFile> openFiles = new HashMap<String, TabFile>();
 
+<<<<<<< HEAD
 
     Tab prevTab = null;
+=======
+    public JSONObject currData;
+>>>>>>> 10ed151e744010326268d1f0257bbb570adb84c5
 
     // This var is the actual code we have in the textarea
     @FXML
@@ -54,6 +64,13 @@ public class StockController{
     @FXML
     private TabPane fileTabPane;
 
+    // This is the search bar in the right tab, used to look up crypto names
+    @FXML
+    private TextField cryptoSearchBar;
+
+    // This is the search button for the above search bar
+    @FXML
+    private Button cryptoButton;
 
 
 
@@ -71,6 +88,28 @@ public class StockController{
     //We need to update this label every time we run something.
     @FXML
     private Label terminal;
+
+    // The following is the checkboxes in the variables tab
+    @FXML
+    private CheckBox supply;
+
+    @FXML
+    private CheckBox maxSupply;
+
+    @FXML
+    private CheckBox marketCapUsd;
+
+    @FXML
+    private CheckBox volumeUsd24Hr;
+
+    @FXML
+    private CheckBox priceUsd;
+
+    @FXML
+    private CheckBox changePercent24Hr;
+
+    @FXML
+    private CheckBox vwap24Hr;
 
 
     //This will add a new file to the current project
@@ -328,10 +367,35 @@ public class StockController{
         }
 
 
+<<<<<<< HEAD
         prevTab = tab;
 
         codeText.setText(openFiles.get(tabname).text);
+=======
+    // Right now this is gonna update currData instance variable to the most recent data
+    // pulled by the API call this triggers, using the listed cryptos in the search bar
+    // and the checked boxes in "variables" tab. Then, clears search bar text.
+    @FXML
+    private void handleCryptoSearch() {
+        String searchBarText = cryptoSearchBar.getText();
+        String[] coins = searchBarText.split("[\\s*,*]+");
+        assert coins.length != 0;
 
+        CheckBox[] checkboxes = {supply, maxSupply, marketCapUsd, volumeUsd24Hr, priceUsd, changePercent24Hr, vwap24Hr};
+        ArrayList<String> constructVars = new ArrayList<>();
+        for (CheckBox box : checkboxes) {
+            if (box.isSelected()) {
+                constructVars.add(box.getId());
+            }
+        }
+        String[] variables = constructVars.toArray(new String[0]);
+
+        currData = API.fetch(coins, variables);
+>>>>>>> 10ed151e744010326268d1f0257bbb570adb84c5
+
+        cryptoSearchBar.setText("");
+        System.out.println(currData);
+    }
 
     }
 

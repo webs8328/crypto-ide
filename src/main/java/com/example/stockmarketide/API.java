@@ -11,19 +11,15 @@ import java.util.Scanner;
 public class API {
 
     //Returns JSONObject of all requested coins and their respective variables
-
-    //reqData format:
-        //
         //  coins = [bitcoin, ethereum, etc.]
         //  variables = [price, supply, etc.]
-        //
 
     public static JSONObject fetch(String[] coins, String[] variables) {
         JSONObject results = new JSONObject();
 
         try {
             String coinString = String.join(",", coins);
-            URL url = new URL("api.coincap.io/v2/assets?ids=" + coinString);
+            URL url = new URL("https://api.coincap.io/v2/assets?ids=" + coinString);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.connect();
@@ -44,8 +40,13 @@ public class API {
                 for (int i = 0; i < coins.length; i++) {
                     JSONObject coin = new JSONObject();
                     JSONObject coinResData = (JSONObject) resData.get(i);
+
                     for (String variable : variables) {
-                        coin.put(variable, coinResData.get(variable));
+                        String varData = null;
+                        if (coinResData.containsKey(variable) && coinResData.get(variable) != null) {
+                            varData = (String) coinResData.get(variable);
+                        }
+                        coin.put(variable, varData);
                     }
                     results.put(coins[i], coin);
                 }
