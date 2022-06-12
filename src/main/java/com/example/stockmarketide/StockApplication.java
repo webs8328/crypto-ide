@@ -14,6 +14,7 @@ public class StockApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Stock Market IDE");
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 

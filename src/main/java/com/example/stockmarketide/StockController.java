@@ -24,6 +24,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.*;
 import javafx.scene.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -74,6 +75,8 @@ public class StockController{
     @FXML
     private Button cryptoButton;
 
+    @FXML
+    private ScrollPane scrollPane;
 
 
     @FXML
@@ -88,7 +91,7 @@ public class StockController{
 
     //We need to update this label every time we run something.
     @FXML
-    private Label terminal;
+    private TextArea terminal;
 
     // The following is the checkboxes in the variables tab
     @FXML
@@ -407,7 +410,6 @@ public class StockController{
 
 
     void makeMenuItem(String name) {
-        System.out.println("Here");
         MenuItem i = new MenuItem(name);
         i.setOnAction(new EventHandler(){
             @Override
@@ -428,12 +430,12 @@ public class StockController{
 
                     // read the output from the command
                     while ((s = stdInput.readLine()) != null) {
-                        terminal.setText(terminal.getText() + "\n" + s);
+                        terminal.appendText( "\n" + s);
                     }
 
                     // read any errors from the attempted command
                     while ((s = stdError.readLine()) != null) {
-                        terminal.setText(terminal.getText() + "\n" + s);
+                        terminal.appendText("\n" + s);
                     }
 
                 } catch (IOException e) {
@@ -443,6 +445,7 @@ public class StockController{
         });
         runMenu.getItems().add(i);
     }
+
 
 
 
