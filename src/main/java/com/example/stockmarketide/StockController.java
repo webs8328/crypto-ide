@@ -2,8 +2,7 @@ package com.example.stockmarketide;
 
 
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 import java.util.ArrayList;
 
@@ -32,7 +31,6 @@ import javafx.event.*;
 
 import org.json.simple.JSONObject;
 
-import java.io.File;
 import java.util.Optional;
 
 public class StockController{
@@ -55,6 +53,10 @@ public class StockController{
 
     public JSONObject currData;
 
+
+
+    @FXML
+    private Menu runMenu;
 
     // This var is the actual code we have in the textarea
     @FXML
@@ -82,8 +84,7 @@ public class StockController{
     private TreeView<String> fileView;
 
     //This menu will update with the names of different files we have open so that we can run them
-    @FXML
-    private Menu runMenu;
+
 
     //We need to update this label every time we run something.
     @FXML
@@ -211,22 +212,13 @@ public class StockController{
             }
             File f = new File(path + "/" + name);
             folder = f;
+            TreeItem<String> root = new TreeItem<String>(name);
 
+            fileView.setRoot(root);
 
 
         }
 
-
-
-
-
-
-
-
-
-        TreeItem<String> root = new TreeItem<String>("Name");
-
-        fileView.setRoot(root);
 
     }
 
@@ -264,6 +256,7 @@ public class StockController{
                     codeText.clear();
                     prevTab = null;
                     openFiles.remove(tab.getText());
+                    runMenu.getItems().remove(tab.getText());
                 }
             });
 
@@ -281,6 +274,7 @@ public class StockController{
             prevTab = tab;
             fileTabPane.getTabs().add(tab);
             fileTabPane.getSelectionModel().select(tab);
+            makeMenuItem(name);
 
         }
 
@@ -408,5 +402,48 @@ public class StockController{
         codeText.clear();
         folder = null;
     }
+
+
+
+
+    void makeMenuItem(String name) {
+        System.out.println("Here");
+        MenuItem i = new MenuItem(name);
+        i.setOnAction(new EventHandler(){
+            @Override
+            public void handle(Event t) {
+                String[] cmd = {
+                        "python3",
+                        openFiles.get(name).file.getAbsolutePath(),
+                };
+                try {
+                    String s = null;
+                    Process p = Runtime.getRuntime().exec(cmd);
+
+                    BufferedReader stdInput = new BufferedReader(new
+                            InputStreamReader(p.getInputStream()));
+
+                    BufferedReader stdError = new BufferedReader(new
+                            InputStreamReader(p.getErrorStream()));
+
+                    // read the output from the command
+                    while ((s = stdInput.readLine()) != null) {
+                        terminal.setText(terminal.getText() + "\n" + s);
+                    }
+
+                    // read any errors from the attempted command
+                    while ((s = stdError.readLine()) != null) {
+                        terminal.setText(terminal.getText() + "\n" + s);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        runMenu.getItems().add(i);
+    }
+
+
 
 }
