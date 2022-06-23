@@ -1,13 +1,7 @@
 package com.example.stockmarketide;
-
-
-
 import java.io.*;
-
 import java.util.ArrayList;
-
 import java.util.HashMap;
-
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
@@ -414,7 +408,7 @@ public class StockController{
             @Override
             public void handle(Event t) {
                 String[] cmd = {
-                        "python3",
+                        "python",
                         openFiles.get(name).file.getAbsolutePath(),
                 };
                 try {
