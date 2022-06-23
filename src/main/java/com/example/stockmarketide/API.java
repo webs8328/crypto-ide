@@ -6,6 +6,7 @@ import org.json.simple.parser.JSONParser;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class API {
@@ -18,6 +19,9 @@ public class API {
         JSONObject results = new JSONObject();
 
         try {
+           for (int i = 0; i < coins.length; i++) {
+               coins[i] = coins[i].toLowerCase();
+           }
             String coinString = String.join(",", coins);
             URL url = new URL("https://api.coincap.io/v2/assets?ids=" + coinString);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
