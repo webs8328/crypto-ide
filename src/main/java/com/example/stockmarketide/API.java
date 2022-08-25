@@ -6,7 +6,6 @@ import org.json.simple.parser.JSONParser;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class API {
@@ -40,16 +39,19 @@ public class API {
                 JSONParser parse = new JSONParser();
                 JSONObject res = (JSONObject) parse.parse(String.valueOf(informationString));
                 JSONArray resData = (JSONArray) res.get("data");
+                System.out.println(resData);
 
                 for (int i = 0; i < coins.length; i++) {
                     JSONObject coin = new JSONObject();
                     JSONObject coinResData = (JSONObject) resData.get(i);
+                    System.out.println(coinResData);
 
                     for (String variable : variables) {
                         String varData = null;
                         if (coinResData.containsKey(variable) && coinResData.get(variable) != null) {
                             varData = (String) coinResData.get(variable);
                         }
+                        System.out.println(varData);
                         coin.put(variable, varData);
                     }
                     results.put(coins[i], coin);

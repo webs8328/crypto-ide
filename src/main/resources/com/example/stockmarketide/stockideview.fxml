@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.stockmarketide.StockController">
    <children>
@@ -52,7 +53,10 @@
                                     <TextArea fx:id="codeText" layoutX="-39.0" layoutY="12.0" prefHeight="600.0" prefWidth="322.8" style="-fx-background-color: blue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <font>
                                           <Font name="Georgia" size="13.0" />
-                                       </font></TextArea>
+                                       </font>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets></TextArea>
                                  </children>
                               </AnchorPane>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
@@ -78,21 +82,26 @@
                                   </Tab>
                                   <Tab text="Variables">
                                     <content>
-                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="192.0" prefWidth="146.0">
                                              <children>
-                                                <CheckBox fx:id="supply" layoutX="21.0" layoutY="5.0" mnemonicParsing="false" text="Supply" />
-                                                <CheckBox fx:id="maxSupply" layoutX="21.0" layoutY="23.0" mnemonicParsing="false" text="Max Supply" />
-                                                <CheckBox fx:id="marketCapUsd" layoutX="21.0" layoutY="41.0" mnemonicParsing="false" text="Market Cap" />
-                                                <CheckBox fx:id="volumeUsd24Hr" layoutX="21.0" layoutY="59.0" mnemonicParsing="false" text="Volume" />
-                                                <CheckBox fx:id="priceUsd" layoutX="21.0" layoutY="77.0" mnemonicParsing="false" text="Price" />
-                                                <CheckBox fx:id="changePercent24Hr" layoutX="21.0" layoutY="95.0" mnemonicParsing="false" text="Percent Change (24 hrs)" />
-                                                <CheckBox fx:id="vwap24Hr" layoutX="21.0" layoutY="113.0" mnemonicParsing="false" text="VWAP (24 hrs)" />
+                                                <Button fx:id="supply" layoutX="42.0" layoutY="2.0" mnemonicParsing="false" onAction="#handleSupply" text="Supply" />
+                                                <Button fx:id="maxSupply" layoutX="29.0" layoutY="25.0" mnemonicParsing="false" onAction="#handleMaxSupply" text="Max Supply" />
+                                                <Button fx:id="marketCapUsd" layoutX="16.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleMarketCapUsd" text="Market Cap USD" />
+                                                <Button fx:id="volumeUsd24Hr" layoutX="22.0" layoutY="73.0" mnemonicParsing="false" onAction="#handleVolumeUsd24Hr" text="Volume(24 hr)" />
+                                                <Button fx:id="priceUsd" layoutX="34.0" layoutY="98.0" mnemonicParsing="false" onAction="#handlePriceUsd" text="Price USD" />
+                                                <Button fx:id="changePercent24Hr" layoutX="19.0" layoutY="123.0" mnemonicParsing="false" onAction="#handleChangePercent24Hr" text="\% Change (24 hr)" />
+                                                <Button fx:id="vwap24Hr" layoutX="25.0" layoutY="148.0" mnemonicParsing="false" onAction="#handleVwap24Hr" text="VWAP (24 hr)" />
                                              </children>
                                           </AnchorPane>
                                     </content>
                                   </Tab>
                                 </tabs>
                               </TabPane>
+                              <Text fx:id="descBox" strokeType="OUTSIDE" strokeWidth="0.0" text="See variables tab for reference instructions and descriptions." textAlignment="CENTER" wrappingWidth="147.13671875" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets top="50.0" />
+                                 </VBox.margin>
+                              </Text>
                            </children></VBox>
                      </items>
                   </SplitPane>

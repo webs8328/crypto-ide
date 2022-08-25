@@ -26,6 +26,7 @@ import javafx.event.*;
 
 import org.json.simple.JSONObject;
 
+import java.util.Map;
 import java.util.Optional;
 
 public class StockController{
@@ -90,7 +91,8 @@ public class StockController{
 
     public JSONObject currData;
 
-
+    @FXML
+    private Text descBox;
 
     @FXML
     private Menu runMenu;
@@ -131,25 +133,44 @@ public class StockController{
 
     // The following is the checkboxes in the variables tab
     @FXML
-    private CheckBox supply;
+    private Button supply;
 
     @FXML
-    private CheckBox maxSupply;
+    private Button maxSupply;
 
     @FXML
-    private CheckBox marketCapUsd;
+    private Button marketCapUsd;
 
     @FXML
-    private CheckBox volumeUsd24Hr;
+    private Button volumeUsd24Hr;
 
     @FXML
-    private CheckBox priceUsd;
+    private Button priceUsd;
 
     @FXML
-    private CheckBox changePercent24Hr;
+    private Button changePercent24Hr;
 
     @FXML
-    private CheckBox vwap24Hr;
+    private Button vwap24Hr;
+
+    private final String[] buttonStrings = {"supply", "maxSupply", "marketCapUsd", "volumeUsd24Hr", "priceUsd", "changePercent24Hr", "vwap24Hr"};
+
+    private final Map<String, String> varDescriptions = Map.of(
+            "supply", "The number of cryptocurrency coins or tokens that are publicly available and circulating in the market.\n" +
+                    "Reference with Coin.supply",
+            "maxSupply", "Quantifies the maximum amount of coins that will ever exist, including the coins that will be mined or made available in the future.\n" +
+                    "Reference with Coin.maxSupply",
+            "marketCapUsd", "Market capitalization (or market cap) is the total value of all the coins that have been mined.\n" +
+                    "Reference with Coin.marketCapUsd",
+            "volumeUsd24Hr", "Сryptocurrency volume is the amount of a given cryptocurrency traded throughout a particular time period.\n" +
+                    "Reference with volumeUsd24Hr",
+            "priceUsd", "Price for 1 token in US Dollars\n" +
+                    "Reference with Coin.priceUsd",
+            "changePercent24Hr", "The change is the difference (in percent) between the price now compared to the price around this time 24 hours ago.\n" +
+                    "Reference with Coin.changePercent24Hr",
+            "vwap24Hr", "VWAP is calculated by totaling the dollars traded for every transaction (price multiplied by the volume) and then dividing by the total shares traded.\n" +
+                    "Reference with Coin.vwap24Hr"
+    );
 
 
     //This will add a new file to the current project
@@ -406,25 +427,54 @@ public class StockController{
     // Right now this is gonna update currData instance variable to the most recent data
     // pulled by the API call this triggers, using the listed cryptos in the search bar
     // and the checked boxes in "variables" tab. Then, clears search bar text.
+
+    //updated to save every checkbox for every coin
     @FXML
     private void handleCryptoSearch() {
         String searchBarText = cryptoSearchBar.getText();
         String[] coins = searchBarText.split("[\\s*,*]+");
         assert coins.length != 0;
 
-        CheckBox[] checkboxes = {supply, maxSupply, marketCapUsd, volumeUsd24Hr, priceUsd, changePercent24Hr, vwap24Hr};
-        ArrayList<String> constructVars = new ArrayList<>();
-        for (CheckBox box : checkboxes) {
-            if (box.isSelected()) {
-                constructVars.add(box.getId());
-            }
-        }
-        String[] variables = constructVars.toArray(new String[0]);
-
-        currData = API.fetch(coins, variables);
+        currData = API.fetch(coins, buttonStrings);
         
         cryptoSearchBar.setText("");
         System.out.println(currData);
+    }
+
+    //handlers for all buttons
+    @FXML
+    private void handleSupply() {
+        descBox.setText(varDescriptions.get("supply"));
+    }
+
+    @FXML
+    private void handleMaxSupply() {
+        descBox.setText(varDescriptions.get("maxSupply"));
+    }
+
+    @FXML
+    private void handleMarketCapUsd() {
+        descBox.setText(varDescriptions.get("marketCapUsd"));
+    }
+
+    @FXML
+    private void handleVolumeUsd24Hr() {
+        descBox.setText(varDescriptions.get("volumeUsd24Hr"));
+    }
+
+    @FXML
+    private void handlePriceUsd() {
+        descBox.setText(varDescriptions.get("priceUsd"));
+    }
+
+    @FXML
+    private void handleChangePercent24Hr() {
+        descBox.setText(varDescriptions.get("changePercent24Hr"));
+    }
+
+    @FXML
+    private void handleVwap24Hr() {
+        descBox.setText(varDescriptions.get("vwap24Hr"));
     }
 
 
