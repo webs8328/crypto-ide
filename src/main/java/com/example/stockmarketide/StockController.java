@@ -30,7 +30,48 @@ import java.util.Optional;
 
 public class StockController{
 
-
+    String classInit = "class Coin:\n" +
+            "    \n" +
+            "    def __init__(self, supply, maxSupply, marketCapUsd, volumeUsed24Hr, priceUsd, changePercent24Hr, vwap24Hr):\n" +
+            "        self.supply = supply\n" +
+            "        self.maxSupply = maxSupply\n" +
+            "        self.marketCapUsd = marketCapUsd\n" +
+            "        self.volumeUsed24Hr = volumeUsed24Hr\n" +
+            "        self.priceUsd = priceUsd\n" +
+            "        self.changePercent24Hr = changePercent24Hr\n" +
+            "        self.vwap24Hr = vwap24Hr\n" +
+            "        \n" +
+            "    def getSupply(self):\n" +
+            "        return self.supply\n" +
+            "    def getMaxSupply(self):\n" +
+            "        return self.maxSupply\n" +
+            "    def getMarketCapUsd(self):\n" +
+            "        return self.marketCapUsd\n" +
+            "    def getVolumeUsed24Hr(self):\n" +
+            "        return self.volumeUsed24Hr\n" +
+            "    def getPriceUsd(self):\n" +
+            "        return self.priceUsd\n" +
+            "    def getChangePercent24Hr(self):\n" +
+            "        return self.changePercent24Hr\n" +
+            "    def getVwap24Hr(self):\n" +
+            "        return self.vwap24Hr\n" +
+            "        \n" +
+            "    def setSupply(self, newVal):\n" +
+            "        self.supply = newVal\n" +
+            "    def setMaxSupply(self, newVal):\n" +
+            "        self.maxSupply = newVal\n" +
+            "    def setMarketCapUsd(self, newVal):\n" +
+            "        self.marketCapUsd = newVal\n" +
+            "    def setVolumeUsed24Hr(self, newVal):\n" +
+            "        self.volumeUsed24Hr = newVal\n" +
+            "    def setPriceUsd(self, newVal):\n" +
+            "        self.priceUsd = newVal\n" +
+            "    def setChangePercent24Hr(self, newVal):\n" +
+            "        self.changePercent24Hr = newVal\n" +
+            "    def setVwap24Hr(self, newVal):\n" +
+            "        self.vwap24Hr = newVal\n" +
+            "    ";
+    ArrayList<String> coinInits = new ArrayList<String>();
     DirectoryChooser dChooser = new DirectoryChooser();
     FileChooser fileChooser = new FileChooser();
 
@@ -381,8 +422,7 @@ public class StockController{
         String[] variables = constructVars.toArray(new String[0]);
 
         currData = API.fetch(coins, variables);
-
-
+        
         cryptoSearchBar.setText("");
         System.out.println(currData);
     }
@@ -407,6 +447,7 @@ public class StockController{
         i.setOnAction(new EventHandler(){
             @Override
             public void handle(Event t) {
+
                 String[] cmd = {
                         "python",
                         openFiles.get(name).file.getAbsolutePath(),
