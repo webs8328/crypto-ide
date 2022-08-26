@@ -1,5 +1,6 @@
 package com.example.stockmarketide;
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.event.Event;
@@ -22,6 +23,10 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import java.io.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import javafx.event.*;
 
 import org.json.simple.JSONObject;
@@ -497,31 +502,58 @@ public class StockController{
         i.setOnAction(new EventHandler(){
             @Override
             public void handle(Event t) {
-
-                String[] cmd = {
-                        "python",
-                        openFiles.get(name).file.getAbsolutePath(),
-                };
                 try {
-                    String s = null;
-                    Process p = Runtime.getRuntime().exec(cmd);
+                    // This gets the user code
+                    String usercode = Files.readString(Path.of(openFiles.get(name).file.getAbsolutePath()));
 
-                    BufferedReader stdInput = new BufferedReader(new
-                            InputStreamReader(p.getInputStream()));
+                    String tempPath = System.getProperty("user.dir") + "/tempfile.txt";
 
-                    BufferedReader stdError = new BufferedReader(new
-                            InputStreamReader(p.getErrorStream()));
+                    String totalStringToWrite = classInit + "\n" + usercode;
 
-                    // read the output from the command
-                    while ((s = stdInput.readLine()) != null) {
-                        terminal.appendText( "\n" + s);
+
+                    File temp = new File(tempPath);
+
+                    FileWriter myWriter = new FileWriter(temp.getAbsolutePath());
+                    myWriter.write(totalStringToWrite);
+                    myWriter.flush();
+                    myWriter.close();
+
+                    /* This was for running the file itself without the stuff we added in for the Coin class
+                    String[] cmd = {
+                            "python",
+                            openFiles.get(name).file.getAbsolutePath(),
+                    };
+                    */
+
+                    String[] cmd = {
+                            "python",
+                            temp.getAbsolutePath(),
+                    };
+
+                    try {
+                        String s = null;
+                        Process p = Runtime.getRuntime().exec(cmd);
+
+                        BufferedReader stdInput = new BufferedReader(new
+                                InputStreamReader(p.getInputStream()));
+
+                        BufferedReader stdError = new BufferedReader(new
+                                InputStreamReader(p.getErrorStream()));
+
+                        // read the output from the command
+                        while ((s = stdInput.readLine()) != null) {
+                            terminal.appendText( "\n" + s);
+                        }
+
+                        // read any errors from the attempted command
+                        while ((s = stdError.readLine()) != null) {
+                            terminal.appendText("\n" + s);
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-
-                    // read any errors from the attempted command
-                    while ((s = stdError.readLine()) != null) {
-                        terminal.appendText("\n" + s);
-                    }
-
+                    temp.delete();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
