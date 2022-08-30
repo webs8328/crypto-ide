@@ -89,7 +89,7 @@ public class StockController{
 
     Tab prevTab = null;
 
-    public JSONObject currData;
+    public HashMap<String, HashMap<String, String>> currData = new HashMap<String, HashMap<String, String>>();
 
     @FXML
     private Text descBox;
@@ -108,6 +108,12 @@ public class StockController{
     // This is the search bar in the right tab, used to look up crypto names
     @FXML
     private TextField cryptoSearchBar;
+
+    @FXML
+    private Text currentCoins;
+
+    @FXML
+    private Text coinNotFound;
 
     // This is the search button for the above search bar
     @FXML
@@ -157,19 +163,19 @@ public class StockController{
 
     private final Map<String, String> varDescriptions = Map.of(
             "supply", "The number of cryptocurrency coins or tokens that are publicly available and circulating in the market.\n" +
-                    "Reference with Coin.supply",
+                    "Reference with [Your Coin].supply",
             "maxSupply", "Quantifies the maximum amount of coins that will ever exist, including the coins that will be mined or made available in the future.\n" +
-                    "Reference with Coin.maxSupply",
+                    "Reference with [Your Coin].maxSupply",
             "marketCapUsd", "Market capitalization (or market cap) is the total value of all the coins that have been mined.\n" +
-                    "Reference with Coin.marketCapUsd",
+                    "Reference with [Your Coin].marketCapUsd",
             "volumeUsd24Hr", "Сryptocurrency volume is the amount of a given cryptocurrency traded throughout a particular time period.\n" +
-                    "Reference with volumeUsd24Hr",
+                    "Reference with [Your Coin].volumeUsd24Hr",
             "priceUsd", "Price for 1 token in US Dollars\n" +
-                    "Reference with Coin.priceUsd",
+                    "Reference with [Your Coin].priceUsd",
             "changePercent24Hr", "The change is the difference (in percent) between the price now compared to the price around this time 24 hours ago.\n" +
-                    "Reference with Coin.changePercent24Hr",
+                    "Reference with [Your Coin].changePercent24Hr",
             "vwap24Hr", "VWAP is calculated by totaling the dollars traded for every transaction (price multiplied by the volume) and then dividing by the total shares traded.\n" +
-                    "Reference with Coin.vwap24Hr"
+                    "Reference with [Your Coin].vwap24Hr"
     );
 
 
@@ -429,16 +435,59 @@ public class StockController{
     // and the checked boxes in "variables" tab. Then, clears search bar text.
 
     //updated to save every checkbox for every coin
+
+    //
     @FXML
     private void handleCryptoSearch() {
         String searchBarText = cryptoSearchBar.getText();
-        String[] coins = searchBarText.split("[\\s*,*]+");
-        assert coins.length != 0;
+        String[] userInput = searchBarText.split("[\\s*,*]+");
+        if (userInput.length == 0) {
+            return;
+        }
 
-        currData = API.fetch(coins, buttonStrings);
+        HashMap<String, HashMap<String, String>> fetchedData = API.fetch(userInput);
+
+        for (String id : fetchedData.keySet()) {
+            currData.put(id, fetchedData.get(id));
+        }
+
+        coinNotFound(userInput);
+        addRunningCoin();
         
         cryptoSearchBar.setText("");
         System.out.println(currData);
+    }
+
+    //crypto search helpers
+    private void coinNotFound(String[] coins) {
+        ArrayList<String> notFound = new ArrayList<>();
+        for (String coin : coins) {
+            if ( !currData.containsKey(coin) ) {
+                notFound.add(coin);
+            }
+        }
+        if (notFound.isEmpty()) {
+            coinNotFound.setText("");
+        } else {
+            String errStr = "The following coins were not found:\n";
+            for (String coin : notFound) {
+                errStr += "- " + coin + "\n";
+            }
+            coinNotFound.setText(errStr);
+        }
+    }
+
+    private void addRunningCoin() {
+        if (currData.keySet().size() == 0) {
+            currentCoins.setText("There are no running coins. Search for some in the 'Crypto' tab.");
+        }
+        else {
+            String str = "Current tracked coins:\n";
+            for (Object coin : currData.keySet()) {
+                str += "- " + coin + "\n";
+            }
+            currentCoins.setText(str);
+        }
     }
 
     //handlers for all buttons
