@@ -1,5 +1,6 @@
 package com.example.stockmarketide;
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.event.Event;
@@ -22,6 +23,10 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import java.io.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import javafx.event.*;
 
 import org.json.simple.JSONObject;
@@ -430,13 +435,9 @@ public class StockController{
     }
 
 
-    // Right now this is gonna update currData instance variable to the most recent data
-    // pulled by the API call this triggers, using the listed cryptos in the search bar
-    // and the checked boxes in "variables" tab. Then, clears search bar text.
-
-    //updated to save every checkbox for every coin
-
-    //
+    //Updates local coin data of those inputted by the user
+    //Updates 'Current Coins' with coins with have local data of
+    //Checks if there were any coins not found and informs user if there is
     @FXML
     private void handleCryptoSearch() {
         String searchBarText = cryptoSearchBar.getText();
@@ -458,7 +459,9 @@ public class StockController{
         System.out.println(currData);
     }
 
-    //crypto search helpers
+    //CRYPTOSEARCH HELPERS
+
+    //Looks for coins in user input that were not found
     private void coinNotFound(String[] coins) {
         ArrayList<String> notFound = new ArrayList<>();
         for (String coin : coins) {
@@ -477,6 +480,7 @@ public class StockController{
         }
     }
 
+    //Adds any new coins to the running list in the 'Current Coins' tab
     private void addRunningCoin() {
         if (currData.keySet().size() == 0) {
             currentCoins.setText("There are no running coins. Search for some in the 'Crypto' tab.");
@@ -546,31 +550,58 @@ public class StockController{
         i.setOnAction(new EventHandler(){
             @Override
             public void handle(Event t) {
-
-                String[] cmd = {
-                        "python",
-                        openFiles.get(name).file.getAbsolutePath(),
-                };
                 try {
-                    String s = null;
-                    Process p = Runtime.getRuntime().exec(cmd);
+                    // This gets the user code
+                    String usercode = Files.readString(Path.of(openFiles.get(name).file.getAbsolutePath()));
 
-                    BufferedReader stdInput = new BufferedReader(new
-                            InputStreamReader(p.getInputStream()));
+                    String tempPath = System.getProperty("user.dir") + "/tempfile.txt";
 
-                    BufferedReader stdError = new BufferedReader(new
-                            InputStreamReader(p.getErrorStream()));
+                    String totalStringToWrite = classInit + "\n" + usercode;
 
-                    // read the output from the command
-                    while ((s = stdInput.readLine()) != null) {
-                        terminal.appendText( "\n" + s);
+
+                    File temp = new File(tempPath);
+
+                    FileWriter myWriter = new FileWriter(temp.getAbsolutePath());
+                    myWriter.write(totalStringToWrite);
+                    myWriter.flush();
+                    myWriter.close();
+
+                    /* This was for running the file itself without the stuff we added in for the Coin class
+                    String[] cmd = {
+                            "python",
+                            openFiles.get(name).file.getAbsolutePath(),
+                    };
+                    */
+
+                    String[] cmd = {
+                            "python",
+                            temp.getAbsolutePath(),
+                    };
+
+                    try {
+                        String s = null;
+                        Process p = Runtime.getRuntime().exec(cmd);
+
+                        BufferedReader stdInput = new BufferedReader(new
+                                InputStreamReader(p.getInputStream()));
+
+                        BufferedReader stdError = new BufferedReader(new
+                                InputStreamReader(p.getErrorStream()));
+
+                        // read the output from the command
+                        while ((s = stdInput.readLine()) != null) {
+                            terminal.appendText( "\n" + s);
+                        }
+
+                        // read any errors from the attempted command
+                        while ((s = stdError.readLine()) != null) {
+                            terminal.appendText("\n" + s);
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-
-                    // read any errors from the attempted command
-                    while ((s = stdError.readLine()) != null) {
-                        terminal.appendText("\n" + s);
-                    }
-
+                    temp.delete();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -1,20 +1,15 @@
 package com.example.stockmarketide;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class API {
-
     //A call to fetch will return an updated HashMap of HashMap object specific to each coin in the input array
     //Use to update state of local coin data
-
     public static HashMap<String, HashMap<String, String>> fetch(String[] coins) {
         HashMap<String, HashMap<String, String>> results = new HashMap<String, HashMap<String, String>>();
 
@@ -69,6 +64,7 @@ public class API {
                    results.put((String) toCopy.get("id"), coinData);
                }
            } else {
+               //In the future this can be a pop up or something
                throw new RuntimeException("Response Code: " + responseCode);
            }
         //handle this catch later
@@ -77,5 +73,4 @@ public class API {
         }
         return results;
     }
-
 }
