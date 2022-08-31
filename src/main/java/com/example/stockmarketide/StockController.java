@@ -454,9 +454,11 @@ public class StockController{
 
         coinNotFound(userInput);
         addRunningCoin();
+
         
         cryptoSearchBar.setText("");
-        System.out.println(currData);
+
+        //System.out.println(currData);
     }
 
     //CRYPTOSEARCH HELPERS
@@ -556,7 +558,17 @@ public class StockController{
 
                     String tempPath = System.getProperty("user.dir") + "/tempfile.txt";
 
-                    String totalStringToWrite = classInit + "\n" + usercode;
+                    String totalStringToWrite = classInit;
+                    for (String key : currData.keySet()) {
+                        HashMap<String, String> coin = currData.get(key);
+                        String declare = key + " = Coin(" + coin.get("supply") + ", " + coin.get("maxSupply") + ", " +
+                                coin.get("marketCapUsd") + ", " + coin.get("volumeUsd24Hr") + ", " +
+                                coin.get("priceUsd") + ", " + coin.get("changePercent24Hr") + ", " +
+                                coin.get("vwap24Hr") + ")";
+                        totalStringToWrite += "\n" + declare + "\n";
+                    }
+                    System.out.println(totalStringToWrite);
+                    totalStringToWrite += "\n" + usercode;
 
 
                     File temp = new File(tempPath);
