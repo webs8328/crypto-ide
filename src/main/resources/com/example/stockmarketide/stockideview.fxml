@@ -12,7 +12,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -66,53 +65,49 @@
                               </AnchorPane>
                           </items>
                         </SplitPane>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
-                                <tabs>
-                                  <Tab text="Crypto">
-                                    <content>
-                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="230.0" prefWidth="114.0">
-                                             <children>
-                                                <TextField fx:id="cryptoSearchBar" alignment="TOP_CENTER" prefHeight="26.0" />
-                                                <Button fx:id="cryptoButton" layoutX="49.0" layoutY="33.0" mnemonicParsing="false" onAction="#handleCryptoSearch" text="Search" />
-                                                <Text fx:id="coinNotFound" layoutX="5.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="138.0" />
-                                             </children>
-                                          </AnchorPane>
-                                    </content>
-                                  </Tab>
-                                  <Tab text="Variables">
-                                    <content>
-                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="192.0" prefWidth="146.0">
-                                             <children>
-                                                <Button fx:id="supply" layoutX="42.0" layoutY="2.0" mnemonicParsing="false" onAction="#handleSupply" text="Supply" />
-                                                <Button fx:id="maxSupply" layoutX="29.0" layoutY="25.0" mnemonicParsing="false" onAction="#handleMaxSupply" text="Max Supply" />
-                                                <Button fx:id="marketCapUsd" layoutX="16.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleMarketCapUsd" text="Market Cap USD" />
-                                                <Button fx:id="volumeUsd24Hr" layoutX="22.0" layoutY="73.0" mnemonicParsing="false" onAction="#handleVolumeUsd24Hr" text="Volume(24 hr)" />
-                                                <Button fx:id="priceUsd" layoutX="34.0" layoutY="98.0" mnemonicParsing="false" onAction="#handlePriceUsd" text="Price USD" />
-                                                <Button fx:id="changePercent24Hr" layoutX="19.0" layoutY="123.0" mnemonicParsing="false" onAction="#handleChangePercent24Hr" text="\% Change (24 hr)" />
-                                                <Button fx:id="vwap24Hr" layoutX="25.0" layoutY="148.0" mnemonicParsing="false" onAction="#handleVwap24Hr" text="VWAP (24 hr)" />
-                                             </children>
-                                          </AnchorPane>
-                                    </content>
-                                  </Tab>
-                                    <Tab text="Current Coins">
-                                      <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                             <children>
-                                                <Text fx:id="currentCoins" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="There are no coins being tracked." textAlignment="CENTER" wrappingWidth="175.86328125" />
-                                             </children>
-                                          </AnchorPane>
-                                      </content>
-                                    </Tab>
-                                </tabs>
-                              </TabPane>
-                              <Text fx:id="descBox" strokeType="OUTSIDE" strokeWidth="0.0" text="See variables tab for reference instructions and descriptions." textAlignment="CENTER" wrappingWidth="147.13671875" VBox.vgrow="ALWAYS">
-                                 <VBox.margin>
-                                    <Insets top="50.0" />
-                                 </VBox.margin>
-                              </Text>
-                           </children></VBox>
+                        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab text="Crypto">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="230.0" prefWidth="114.0">
+                                       <children>
+                                          <TextField fx:id="cryptoSearchBar" alignment="TOP_CENTER" prefHeight="26.0" />
+                                          <Button fx:id="cryptoButton" layoutX="49.0" layoutY="33.0" mnemonicParsing="false" onAction="#handleCryptoSearch" text="Search" />
+                                          <Text fx:id="coinNotFound" layoutX="5.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="138.0" />
+                                          <Text fx:id="coinNotFound" layoutX="52.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="46.39996337890625" />
+                                          <TextField fx:id="deleteSearchBar" alignment="TOP_CENTER" layoutY="72.0" prefHeight="26.0" />
+                                          <Button fx:id="deleteButton" layoutX="49.0" layoutY="106.0" mnemonicParsing="false" onAction="#handleDeleteButton" text="Delete" />
+                                          <Text fx:id="coinNotFound" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="146.39999999999986" />
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                            <Tab text="Variables">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="192.0" prefWidth="146.0">
+                                       <children>
+                                          <Button fx:id="supply" layoutX="42.0" layoutY="2.0" mnemonicParsing="false" onAction="#handleSupply" text="Supply" />
+                                          <Button fx:id="maxSupply" layoutX="29.0" layoutY="25.0" mnemonicParsing="false" onAction="#handleMaxSupply" text="Max Supply" />
+                                          <Button fx:id="marketCapUsd" layoutX="16.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleMarketCapUsd" text="Market Cap USD" />
+                                          <Button fx:id="volumeUsd24Hr" layoutX="22.0" layoutY="73.0" mnemonicParsing="false" onAction="#handleVolumeUsd24Hr" text="Volume(24 hr)" />
+                                          <Button fx:id="priceUsd" layoutX="34.0" layoutY="98.0" mnemonicParsing="false" onAction="#handlePriceUsd" text="Price USD" />
+                                          <Button fx:id="changePercent24Hr" layoutX="19.0" layoutY="123.0" mnemonicParsing="false" onAction="#handleChangePercent24Hr" text="\% Change (24 hr)" />
+                                          <Button fx:id="vwap24Hr" layoutX="25.0" layoutY="148.0" mnemonicParsing="false" onAction="#handleVwap24Hr" text="VWAP (24 hr)" />
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                              <Tab text="Current Coins">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Text fx:id="currentCoins" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="There are no coins being tracked." textAlignment="CENTER" wrappingWidth="175.86328125" />
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </Tab>
+                          </tabs>
+                        </TabPane>
                      </items>
                   </SplitPane>
                </children>

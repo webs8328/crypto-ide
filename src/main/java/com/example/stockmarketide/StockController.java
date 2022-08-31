@@ -115,6 +115,9 @@ public class StockController{
     private TextField cryptoSearchBar;
 
     @FXML
+    private TextField deleteSearchBar;
+
+    @FXML
     private Text currentCoins;
 
     @FXML
@@ -459,9 +462,34 @@ public class StockController{
         System.out.println(currData);
     }
 
+    @FXML
+    private void handleDeleteButton() {
+        String deleteText = deleteSearchBar.getText();
+        String[] userInput = deleteText.split("[\\s*,*]+");
+        if (userInput.length == 0) {
+            return;
+        }
+
+        for (String c : userInput) {
+            currData.remove(c);
+        }
+
+        addDeletedCoins(userInput);
+    }
+
+
     //CRYPTOSEARCH HELPERS
 
     //Looks for coins in user input that were not found
+    private void addDeletedCoins(String[] inputs) {
+        String delStr = "The following coins were deleted:\n";
+        for (String c : inputs) {
+            delStr += "- " + c + "\n";
+        }
+        coinNotFound.setText(delStr);
+        addRunningCoin();
+    }
+
     private void coinNotFound(String[] coins) {
         ArrayList<String> notFound = new ArrayList<>();
         for (String coin : coins) {
