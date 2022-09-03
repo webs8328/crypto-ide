@@ -1,14 +1,11 @@
 package com.example.stockmarketide;
 import java.io.*;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
@@ -17,20 +14,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.*;
-import javafx.scene.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import java.io.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javafx.event.*;
-
-import org.json.simple.JSONObject;
-
 import java.util.Map;
 import java.util.Optional;
 
@@ -81,16 +73,12 @@ public class StockController{
     DirectoryChooser dChooser = new DirectoryChooser();
     FileChooser fileChooser = new FileChooser();
 
-
     //This var is to store the overall project folder
     public static File folder = null;
 
-
-    // This var is used to store the current open tabs we have
+    // Thisvar is used to store the current open tabs we have
     public HashMap<String, TabFile> openFiles = new HashMap<String, TabFile>();
     public HashMap<String, MenuItem> openFilesMenu = new HashMap<String, MenuItem>();
-
-
 
     Tab prevTab = null;
 
@@ -123,14 +111,6 @@ public class StockController{
     @FXML
     private Text coinNotFound;
 
-    // This is the search button for the above search bar
-    @FXML
-    private Button cryptoButton;
-
-    @FXML
-    private ScrollPane scrollPane;
-
-
     @FXML
     private AnchorPane ap;
 
@@ -144,30 +124,6 @@ public class StockController{
     //We need to update this label every time we run something.
     @FXML
     private TextArea terminal;
-
-    // The following is the checkboxes in the variables tab
-    @FXML
-    private Button supply;
-
-    @FXML
-    private Button maxSupply;
-
-    @FXML
-    private Button marketCapUsd;
-
-    @FXML
-    private Button volumeUsd24Hr;
-
-    @FXML
-    private Button priceUsd;
-
-    @FXML
-    private Button changePercent24Hr;
-
-    @FXML
-    private Button vwap24Hr;
-
-    private final String[] buttonStrings = {"supply", "maxSupply", "marketCapUsd", "volumeUsd24Hr", "priceUsd", "changePercent24Hr", "vwap24Hr"};
 
     private final Map<String, String> varDescriptions = Map.of(
             "supply", "The number of cryptocurrency coins or tokens that are publicly available and circulating in the market.\n" +
@@ -229,7 +185,6 @@ public class StockController{
                     return;
                 }
                 createTree(f, fileView.getRoot());
-
             } catch (IOException e) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setHeaderText("Error");
@@ -237,11 +192,7 @@ public class StockController{
                 errorAlert.showAndWait();
                 return;
             }
-
-
         }
-
-
     }
 
     //This will create an entirely new project
@@ -289,11 +240,7 @@ public class StockController{
             TreeItem<String> root = new TreeItem<String>(name);
 
             fileView.setRoot(root);
-
-
         }
-
-
     }
 
 
@@ -304,8 +251,7 @@ public class StockController{
     void openFile(MouseEvent event) throws Exception {
         SingleSelectionModel<Tab> selectionModel = fileTabPane.getSelectionModel();
 
-        if(event.getClickCount() == 2)
-        {
+        if(event.getClickCount() == 2) {
             TreeItem<String> item = fileView.getSelectionModel().getSelectedItem();
 
             String name = item.getValue();
@@ -321,12 +267,9 @@ public class StockController{
                     changeText(t);
                 }
             });
-
-            tab.setOnCloseRequest(new EventHandler<Event>()
-            {
+            tab.setOnCloseRequest(new EventHandler<Event>() {
                 @Override
-                public void handle(Event arg0)
-                {
+                public void handle(Event arg0) {
                     codeText.clear();
                     prevTab = null;
                     openFiles.remove(tab.getText());
@@ -352,7 +295,6 @@ public class StockController{
             fileTabPane.getSelectionModel().select(tab);
             makeMenuItem(name);
         }
-
     }
 
     @FXML
@@ -422,18 +364,12 @@ public class StockController{
     @FXML
     void changeText(Event event) {
         Tab tab = fileTabPane.getSelectionModel().getSelectedItem();
-
         String tabname = tab.getText();
-
         if (prevTab != null && fileTabPane.getTabs().contains(prevTab)) {
             String prevText = codeText.getText();
             openFiles.get(prevTab.getText()).text = prevText;
         }
-
-
-
         prevTab = tab;
-
         codeText.setText(openFiles.get(tabname).text);
     }
 
@@ -458,10 +394,7 @@ public class StockController{
         coinNotFound(userInput);
         addRunningCoin();
 
-        
         cryptoSearchBar.setText("");
-
-        //System.out.println(currData);
     }
 
     @FXML
@@ -472,25 +405,30 @@ public class StockController{
             return;
         }
 
+        ArrayList<String> removedCoins = new ArrayList<>();
+
         for (String c : userInput) {
-            currData.remove(c);
+            if (currData.containsKey(c)) {
+                currData.remove(c);
+                removedCoins.add(c);
+            }
         }
 
-        addDeletedCoins(userInput);
+        if (!removedCoins.isEmpty()) {
+            String delStr = "The following coins were deleted:\n";
+            for (String c : removedCoins) {
+                delStr += "- " + c + "\n";
+            }
+            coinNotFound.setText(delStr);
+            addRunningCoin();
+        } else {
+            coinNotFound.setText("");
+        }
+        deleteSearchBar.setText("");
     }
 
 
     //CRYPTOSEARCH HELPERS
-
-    //Looks for coins in user input that were not found
-    private void addDeletedCoins(String[] inputs) {
-        String delStr = "The following coins were deleted:\n";
-        for (String c : inputs) {
-            delStr += "- " + c + "\n";
-        }
-        coinNotFound.setText(delStr);
-        addRunningCoin();
-    }
 
     private void coinNotFound(String[] coins) {
         ArrayList<String> notFound = new ArrayList<>();
@@ -560,9 +498,6 @@ public class StockController{
         descBox.setText(varDescriptions.get("vwap24Hr"));
     }
 
-
-
-
     void clearStuff() {
         openFiles.clear();
         openFilesMenu.clear();
@@ -571,9 +506,6 @@ public class StockController{
         codeText.clear();
         folder = null;
     }
-
-
-
 
     void makeMenuItem(String name) {
         MenuItem i = new MenuItem(name);
@@ -597,7 +529,6 @@ public class StockController{
                     }
                     System.out.println(totalStringToWrite);
                     totalStringToWrite += "\n" + usercode;
-
 
                     File temp = new File(tempPath);
 
@@ -650,8 +581,4 @@ public class StockController{
         runMenu.getItems().add(i);
         openFilesMenu.put(name, i);
     }
-
-
-
-
 }
