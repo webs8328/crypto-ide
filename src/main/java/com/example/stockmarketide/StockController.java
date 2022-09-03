@@ -379,12 +379,13 @@ public class StockController{
     //Checks if there were any coins not found and informs user if there is
     @FXML
     private void handleCryptoSearch() {
-        String searchBarText = cryptoSearchBar.getText();
-        String[] userInput = searchBarText.split("[\\s*,*]+");
-        if (userInput.length == 0) {
+        if (cryptoSearchBar.getText().matches("\\s*")) {
+            cryptoSearchBar.setText("");
             return;
         }
 
+        String searchBarText = cryptoSearchBar.getText();
+        String[] userInput = searchBarText.split("[\\s*,*]+");
         HashMap<String, HashMap<String, String>> fetchedData = API.fetch(userInput);
 
         for (String id : fetchedData.keySet()) {
